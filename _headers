@@ -1,0 +1,12 @@
+# Cloudflare Pages 自定义 HTTP 头
+# 静态资源长期缓存
+/style.css
+  Cache-Control: public, max-age=86400
+
+/app.js
+  Cache-Control: public, max-age=86400
+
+# 下载文件短期缓存
+/files/*
+  Cache-Control: public, max-age=3600
+  Content-Disposition: attachment

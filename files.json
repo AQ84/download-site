@@ -1,0 +1,60 @@
+{
+    "files": [
+        {
+            "name": "SkinsRestorer-v15.12.3.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "15.12.3",
+            "description": "Minecraft 皮肤恢复插件（修改版）"
+        },
+        {
+            "name": "MysticShop.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "神秘商店插件"
+        },
+        {
+            "name": "QuickBuy.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "快速购买插件"
+        },
+        {
+            "name": "ItemCleaner.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "物品清理插件"
+        },
+        {
+            "name": "LobbyNPC.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "大厅NPC插件"
+        },
+        {
+            "name": "MysticScoreboard.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "计分板插件"
+        },
+        {
+            "name": "SpawnerUpgrade.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "刷怪笼升级插件"
+        },
+        {
+            "name": "BedwarsUtils.jar",
+            "size_bytes": 0,
+            "date": "2026-07-31",
+            "version": "1.0",
+            "description": "起床战争工具插件"
+        }
+    ]
+}
