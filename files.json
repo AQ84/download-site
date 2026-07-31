@@ -1,60 +1,30 @@
 {
-    "files": [
+    "packages": [
         {
-            "name": "SkinsRestorer-v15.12.3.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "15.12.3",
-            "description": "Minecraft 皮肤恢复插件（修改版）"
+            "id": "minecraft-portable",
+            "name": "Minecraft 便携版",
+            "description": "完整 Minecraft 1.12.2 便携版，含 JDK 17 + PCL + 配置 + 存档 + 材质包，解压即玩",
+            "version": "1.12.2",
+            "date": "2026-06-13",
+            "format": "tar.gz",
+            "merge_cmd": "copy /b Minecraft-Portable.tar.gz.aa + Minecraft-Portable.tar.gz.ab + ... + Minecraft-Portable.tar.gz.bt Minecraft-Portable.tar.gz",
+            "parts": [
+                "Minecraft-Portable.tar.gz.aa","Minecraft-Portable.tar.gz.ab","Minecraft-Portable.tar.gz.ac","Minecraft-Portable.tar.gz.ad","Minecraft-Portable.tar.gz.ae","Minecraft-Portable.tar.gz.af","Minecraft-Portable.tar.gz.ag","Minecraft-Portable.tar.gz.ah","Minecraft-Portable.tar.gz.ai","Minecraft-Portable.tar.gz.aj","Minecraft-Portable.tar.gz.ak","Minecraft-Portable.tar.gz.al","Minecraft-Portable.tar.gz.am","Minecraft-Portable.tar.gz.an","Minecraft-Portable.tar.gz.ao","Minecraft-Portable.tar.gz.ap","Minecraft-Portable.tar.gz.aq","Minecraft-Portable.tar.gz.ar","Minecraft-Portable.tar.gz.as","Minecraft-Portable.tar.gz.at","Minecraft-Portable.tar.gz.au","Minecraft-Portable.tar.gz.av","Minecraft-Portable.tar.gz.aw","Minecraft-Portable.tar.gz.ax","Minecraft-Portable.tar.gz.ay","Minecraft-Portable.tar.gz.az","Minecraft-Portable.tar.gz.ba","Minecraft-Portable.tar.gz.bb","Minecraft-Portable.tar.gz.bc","Minecraft-Portable.tar.gz.bd","Minecraft-Portable.tar.gz.be","Minecraft-Portable.tar.gz.bf","Minecraft-Portable.tar.gz.bg","Minecraft-Portable.tar.gz.bh","Minecraft-Portable.tar.gz.bi","Minecraft-Portable.tar.gz.bj","Minecraft-Portable.tar.gz.bk","Minecraft-Portable.tar.gz.bl","Minecraft-Portable.tar.gz.bm","Minecraft-Portable.tar.gz.bn","Minecraft-Portable.tar.gz.bo","Minecraft-Portable.tar.gz.bp","Minecraft-Portable.tar.gz.bq","Minecraft-Portable.tar.gz.br","Minecraft-Portable.tar.gz.bs","Minecraft-Portable.tar.gz.bt"
+            ]
         },
         {
-            "name": "MysticShop.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "神秘商店插件"
-        },
-        {
-            "name": "QuickBuy.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "快速购买插件"
-        },
-        {
-            "name": "ItemCleaner.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "物品清理插件"
-        },
-        {
-            "name": "LobbyNPC.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "大厅NPC插件"
-        },
-        {
-            "name": "MysticScoreboard.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "计分板插件"
-        },
-        {
-            "name": "SpawnerUpgrade.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "刷怪笼升级插件"
-        },
-        {
-            "name": "BedwarsUtils.jar",
-            "size_bytes": 0,
-            "date": "2026-07-31",
-            "version": "1.0",
-            "description": "起床战争工具插件"
+            "id": "cloudlauncher",
+            "name": "CloudLauncher 启动器",
+            "description": "Qt5.15 MC 启动器最新版，含 CloudLauncher.exe + OpenSSL DLL",
+            "version": "0.0.3",
+            "date": "2026-07-29",
+            "format": "zip",
+            "merge_cmd": "copy /b CloudLauncher-latest.zip.aa + CloudLauncher-latest.zip.ab CloudLauncher-latest.zip",
+            "parts": [
+                "CloudLauncher-latest.zip.aa",
+                "CloudLauncher-latest.zip.ab"
+            ]
         }
-    ]
+    ],
+    "files": []
 }
