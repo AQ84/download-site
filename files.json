@@ -6,9 +6,9 @@
             "description": "解压到 C:\\ 根目录，双击启动.bat 选用户名即可玩。含 JDK17 + PCL + 5个账号 + 存档 + 材质包。自带改IP指南。",
             "version": "1.12.2",
             "date": "2026-08-01",
-            "format": "tar.gz",
-            "url": "https://github.com/AQ84/download-site/releases/download/v1.0/Minecraft-Portable.tar.gz",
-            "size_mb": 890,
+            "format": "zip",
+            "url": "https://github.com/AQ84/download-site/releases/download/v1.0/Minecraft-Portable.zip",
+            "size_mb": 894,
             "notes": "下载后解压到 C:\\，确保 C:\\LibericaJDK-17、C:\\.minecraft、C:\\PCL 三个目录都在，然后双击 C:\\启动.bat"
         },
         {
@@ -17,9 +17,9 @@
             "description": "Qt5.15 MC 启动器 v0.0.3，含 CloudLauncher.exe + OpenSSL DLL",
             "version": "0.0.3",
             "date": "2026-07-29",
-            "format": "tar.gz",
-            "parts": ["CloudLauncher-latest.tar.gz"],
-            "merge_cmd": "tar xzf CloudLauncher-latest.tar.gz"
+            "format": "zip",
+            "parts": ["CloudLauncher-latest.zip"],
+            "merge_cmd": ""
         }
     ],
     "files": []
