@@ -9,60 +9,41 @@
     let packages = [];
     let files = [];
 
-    function getFileType(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const m = {
-            jar:'jar', zip:'zip', rar:'zip', '7z':'zip', tar:'zip', gz:'zip', bz2:'zip', xz:'zip',
-            exe:'exe', msi:'exe', apk:'exe',
-            pdf:'pdf',
-            png:'img', jpg:'img', jpeg:'img', gif:'img', svg:'img', webp:'img',
-            mp4:'img', mp3:'img', wav:'img', flac:'img',
-            aa:'part', ab:'part', ac:'part', ad:'part', ae:'part', af:'part', ag:'part',
-            ah:'part', ai:'part', aj:'part', ak:'part', al:'part', am:'part', an:'part',
-            ao:'part', ap:'part', aq:'part', ar:'part', as:'part', at:'part', au:'part',
-            av:'part', aw:'part', ax:'part', ay:'part', az:'part', ba:'part', bb:'part',
-            bc:'part', bd:'part', be:'part', bf:'part', bg:'part', bh:'part', bi:'part',
-            bj:'part', bk:'part', bl:'part', bm:'part', bn:'part', bo:'part', bp:'part',
-            bq:'part', br:'part', bs:'part', bt:'part',
-        };
-        return m[ext] || 'other';
-    }
-
-    function getFileIcon(filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        const m = {
-            jar:'☕', zip:'📦', rar:'📦', '7z':'📦', tar:'📦', gz:'📦',
-            exe:'⚙️', apk:'📱', pdf:'📄',
-            png:'🖼️', jpg:'🖼️', jpeg:'🖼️', gif:'🖼️', svg:'🖼️',
-            mp4:'🎬', mp3:'🎵', wav:'🎵',
-            json:'{}', xml:'<>', js:'📜', ts:'📜', py:'🐍', java:'☕',
-            sh:'💻', bat:'💻', ps1:'💻', txt:'📃', md:'📝', html:'🌐', css:'🎨',
-            aa:'🧩', ab:'🧩', ac:'🧩',
-        };
-        return m[ext] || '📁';
-    }
-
-    function formatSize(bytes) {
-        if (!bytes || bytes === 0) return '';
-        const units = ['B', 'KB', 'MB', 'GB'];
-        let i = 0, size = bytes;
-        while (size >= 1024 && i < units.length - 1) { size /= 1024; i++; }
-        return size.toFixed(i === 0 ? 0 : 1) + ' ' + units[i];
-    }
-
     function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     }
 
-    // 渲染分组包
-    function renderPackage(pkg) {
-        const parts = pkg.parts || [];
-        const ext = pkg.format || pkg.parts[0]?.split('.').slice(-1)[0] || '';
-        const partSize = formatSize(20 * 1024 * 1024); // 20MB per part
-        const pkgId = 'pkg-' + (pkg.id || Math.random().toString(36));
+    // 渲染有直链URL的包（如 GitHub Release）
+    function renderUrlPackage(pkg) {
+        const sizeStr = pkg.size_mb ? pkg.size_mb + ' MB' : '';
+        return `
+        <div class="pkg-card url-pkg">
+            <div class="pkg-header">
+                <div class="pkg-icon">📦</div>
+                <div class="pkg-info">
+                    <div class="pkg-name">${escapeHtml(pkg.name)}</div>
+                    <div class="pkg-meta">
+                        <span>📅 ${escapeHtml(pkg.date || '')}</span>
+                        ${pkg.version ? `<span>🏷️ v${escapeHtml(pkg.version)}</span>` : ''}
+                        ${sizeStr ? `<span>📏 ${escapeHtml(sizeStr)}</span>` : ''}
+                        <span class="pkg-format">.${escapeHtml(pkg.format || '')}</span>
+                    </div>
+                    ${pkg.description ? `<div class="pkg-desc">${escapeHtml(pkg.description)}</div>` : ''}
+                    ${pkg.notes ? `<div class="pkg-notes">📌 ${escapeHtml(pkg.notes)}</div>` : ''}
+                </div>
+                <a href="${escapeHtml(pkg.url)}" class="dl-btn" target="_blank" rel="noopener" onclick="this.textContent='⏳ 下载中...'">
+                    ⬇ 下载
+                </a>
+            </div>
+        </div>`;
+    }
 
+    // 渲染有分卷的包（本地文件）
+    function renderPartsPackage(pkg) {
+        const parts = pkg.parts || [];
+        const ext = pkg.format || '';
         return `
         <div class="pkg-card">
             <div class="pkg-header" onclick="this.parentElement.classList.toggle('open')">
@@ -72,21 +53,22 @@
                     <div class="pkg-meta">
                         <span>📅 ${escapeHtml(pkg.date || '')}</span>
                         ${pkg.version ? `<span>🏷️ v${escapeHtml(pkg.version)}</span>` : ''}
-                        <span>🧩 ${parts.length} 个分卷</span>
+                        <span>🧩 ${parts.length} 个文件</span>
                         <span class="pkg-format">.${escapeHtml(ext)}</span>
                     </div>
                     ${pkg.description ? `<div class="pkg-desc">${escapeHtml(pkg.description)}</div>` : ''}
                 </div>
                 <div class="pkg-toggle">▸</div>
             </div>
-            <div class="pkg-parts" id="${pkgId}">
+            <div class="pkg-parts">
+                ${pkg.merge_cmd ? `
                 <div class="merge-hint">
                     <div class="merge-cmd">
                         <span class="merge-label">📋 合并命令 (CMD)：</span>
-                        <code>${escapeHtml(pkg.merge_cmd || '')}</code>
+                        <code>${escapeHtml(pkg.merge_cmd)}</code>
                     </div>
                     <button class="copy-btn" onclick="navigator.clipboard.writeText(this.parentElement.querySelector('code').textContent); this.textContent='✅ 已复制'; setTimeout(()=>this.textContent='📋 复制',2000)">📋 复制</button>
-                </div>
+                </div>` : ''}
                 <div class="parts-grid">
                     ${parts.map((name, i) => `
                         <a href="files/${encodeURIComponent(name)}" class="part-item" download>
@@ -100,20 +82,16 @@
         </div>`;
     }
 
-    // 渲染单文件
     function renderFile(f, i) {
-        const type = getFileType(f.name);
-        const icon = getFileIcon(f.name);
         const desc = f.description || '';
         return `
         <div class="file-card" style="animation-delay:${i * 0.02}s">
-            <div class="file-icon ${type}">${icon}</div>
+            <div class="file-icon other">📁</div>
             <div class="file-info">
                 <div class="file-name" title="${escapeHtml(f.name)}">${escapeHtml(f.name)}</div>
                 ${desc ? `<div class="file-desc">${escapeHtml(desc)}</div>` : ''}
                 <div class="file-meta">
                     <span>📅 ${escapeHtml(f.date || '')}</span>
-                    ${f.size_bytes ? `<span>📏 ${formatSize(f.size_bytes)}</span>` : ''}
                     ${f.version ? `<span>🏷️ v${escapeHtml(f.version)}</span>` : ''}
                 </div>
             </div>
@@ -122,30 +100,25 @@
     }
 
     function renderAll(pkgs, fls) {
-        const pkgsHtml = pkgs.map(p => renderPackage(p)).join('');
-        const flsHtml = fls.length ? '<div class="section-title">📄 单文件</div>' + fls.map((f, i) => renderFile(f, i)).join('') : '';
+        const html = pkgs.map(p => {
+            if (p.url) return renderUrlPackage(p);
+            return renderPartsPackage(p);
+        }).join('') +
+        (fls.length ? '<div class="section-title">📄 单文件</div>' + fls.map((f, i) => renderFile(f, i)).join('') : '');
 
         if (!pkgs.length && !fls.length) {
             fileList.innerHTML = '<div class="empty">📭 没有找到文件</div>';
         } else {
-            fileList.innerHTML = pkgsHtml + flsHtml;
+            fileList.innerHTML = html;
         }
 
-        const totalParts = pkgs.reduce((s, p) => s + (p.parts || []).length, 0);
         fileCount.textContent = fls.length + pkgs.length;
-        totalSize.textContent = (totalParts > 0 || fls.length > 0) ? '' : '0';
-        if (totalParts > 0) {
-            totalSize.textContent = totalParts + ' 个分包';
-        }
+        totalSize.textContent = '';
     }
 
-    // 搜索
     function doSearch() {
         const q = searchInput.value.toLowerCase().trim();
-        if (!q) {
-            renderAll(packages, files);
-            return;
-        }
+        if (!q) { renderAll(packages, files); return; }
         const fp = packages.filter(p =>
             p.name.toLowerCase().includes(q) ||
             (p.description || '').toLowerCase().includes(q) ||
@@ -161,15 +134,11 @@
 
     searchInput.addEventListener('input', doSearch);
 
-    // 加载
     fetch('files.json')
         .then(res => res.json())
         .then(data => {
             packages = data.packages || [];
-            files = (data.files || []).sort((a, b) => {
-                if (a.date && b.date) return b.date.localeCompare(a.date);
-                return 0;
-            });
+            files = data.files || [];
             renderAll(packages, files);
         })
         .catch(err => {

@@ -297,6 +297,24 @@ header h1 {
     display: block;
 }
 
+/* URL package (direct download) */
+.pkg-card.url-pkg .pkg-header {
+    cursor: default;
+}
+
+.pkg-card.url-pkg .pkg-header:hover {
+    background: var(--bg-card);
+}
+
+.pkg-notes {
+    font-size: 0.8rem;
+    color: var(--orange);
+    margin-top: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .merge-hint {
     display: flex;
     align-items: center;

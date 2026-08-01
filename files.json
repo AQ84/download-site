@@ -2,28 +2,24 @@
     "packages": [
         {
             "id": "minecraft-portable",
-            "name": "Minecraft 便携版",
-            "description": "完整 Minecraft 1.12.2 便携版，含 JDK 17 + PCL + 配置 + 存档 + 材质包，解压即玩",
+            "name": "Minecraft 1.12.2 便携版",
+            "description": "解压到 C:\\ 根目录，双击启动.bat 选用户名即可玩。含 JDK17 + PCL + 5个账号 + 存档 + 材质包。自带改IP指南。",
             "version": "1.12.2",
-            "date": "2026-06-13",
+            "date": "2026-08-01",
             "format": "tar.gz",
-            "merge_cmd": "copy /b Minecraft-Portable.tar.gz.aa + Minecraft-Portable.tar.gz.ab + ... + Minecraft-Portable.tar.gz.bt Minecraft-Portable.tar.gz",
-            "parts": [
-                "Minecraft-Portable.tar.gz.aa","Minecraft-Portable.tar.gz.ab","Minecraft-Portable.tar.gz.ac","Minecraft-Portable.tar.gz.ad","Minecraft-Portable.tar.gz.ae","Minecraft-Portable.tar.gz.af","Minecraft-Portable.tar.gz.ag","Minecraft-Portable.tar.gz.ah","Minecraft-Portable.tar.gz.ai","Minecraft-Portable.tar.gz.aj","Minecraft-Portable.tar.gz.ak","Minecraft-Portable.tar.gz.al","Minecraft-Portable.tar.gz.am","Minecraft-Portable.tar.gz.an","Minecraft-Portable.tar.gz.ao","Minecraft-Portable.tar.gz.ap","Minecraft-Portable.tar.gz.aq","Minecraft-Portable.tar.gz.ar","Minecraft-Portable.tar.gz.as","Minecraft-Portable.tar.gz.at","Minecraft-Portable.tar.gz.au","Minecraft-Portable.tar.gz.av","Minecraft-Portable.tar.gz.aw","Minecraft-Portable.tar.gz.ax","Minecraft-Portable.tar.gz.ay","Minecraft-Portable.tar.gz.az","Minecraft-Portable.tar.gz.ba","Minecraft-Portable.tar.gz.bb","Minecraft-Portable.tar.gz.bc","Minecraft-Portable.tar.gz.bd","Minecraft-Portable.tar.gz.be","Minecraft-Portable.tar.gz.bf","Minecraft-Portable.tar.gz.bg","Minecraft-Portable.tar.gz.bh","Minecraft-Portable.tar.gz.bi","Minecraft-Portable.tar.gz.bj","Minecraft-Portable.tar.gz.bk","Minecraft-Portable.tar.gz.bl","Minecraft-Portable.tar.gz.bm","Minecraft-Portable.tar.gz.bn","Minecraft-Portable.tar.gz.bo","Minecraft-Portable.tar.gz.bp","Minecraft-Portable.tar.gz.bq","Minecraft-Portable.tar.gz.br","Minecraft-Portable.tar.gz.bs","Minecraft-Portable.tar.gz.bt"
-            ]
+            "url": "https://github.com/AQ84/download-site/releases/download/v1.0/Minecraft-Portable.tar.gz",
+            "size_mb": 890,
+            "notes": "下载后解压到 C:\\，确保 C:\\LibericaJDK-17、C:\\.minecraft、C:\\PCL 三个目录都在，然后双击 C:\\启动.bat"
         },
         {
             "id": "cloudlauncher",
             "name": "CloudLauncher 启动器",
-            "description": "Qt5.15 MC 启动器最新版，含 CloudLauncher.exe + OpenSSL DLL",
+            "description": "Qt5.15 MC 启动器 v0.0.3，含 CloudLauncher.exe + OpenSSL DLL",
             "version": "0.0.3",
             "date": "2026-07-29",
-            "format": "zip",
-            "merge_cmd": "copy /b CloudLauncher-latest.zip.aa + CloudLauncher-latest.zip.ab CloudLauncher-latest.zip",
-            "parts": [
-                "CloudLauncher-latest.zip.aa",
-                "CloudLauncher-latest.zip.ab"
-            ]
+            "format": "tar.gz",
+            "parts": ["CloudLauncher-latest.tar.gz"],
+            "merge_cmd": "tar xzf CloudLauncher-latest.tar.gz"
         }
     ],
     "files": []
