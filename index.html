@@ -13,22 +13,19 @@
             <p class="subtitle">download.aq84.xyz</p>
         </header>
 
+        <div id="breadcrumb" class="breadcrumb"></div>
+
         <div class="toolbar">
             <input type="text" id="search" placeholder="🔍 搜索文件..." autocomplete="off">
-            <div class="stats">
-                <span id="fileCount">0</span> 个文件 · 共 <span id="totalSize">0</span>
-            </div>
+            <span id="resultInfo" class="stats"></span>
         </div>
 
-        <div id="fileList" class="file-list">
-            <div class="loading">加载中...</div>
-        </div>
+        <div id="content"></div>
 
         <footer>
-            <p>© 2026 AQ84 · Powered by <a href="https://pages.cloudflare.com" target="_blank">Cloudflare Pages</a></p>
+            <p>© 2026 AQ84 · <a href="https://pages.cloudflare.com" target="_blank">Cloudflare Pages</a></p>
         </footer>
     </div>
-
     <script src="app.js"></script>
 </body>
 </html>

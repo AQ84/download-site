@@ -1,37 +1,62 @@
 {
-    "packages": [
+    "categories": [
         {
-            "id": "singlefile-mc",
-            "name": "MC 单文件启动器 (NEW!)",
-            "description": "一个 EXE 一个玩家！下载后改名为你的用户名.exe 双击即玩。首次运行自动解压，之后秒开。内含纯净 1.12.2 + Java 8 + PCL。",
-            "version": "1.12.2",
-            "date": "2026-08-05",
-            "format": "exe",
-            "url": "https://github.com/AQ84/download-site/releases/download/v2.0/singlefileMC.exe",
-            "size_mb": 421,
-            "notes": "改名规则: ChuLe.exe / LiuRuiJie.exe / WangRuiChen.exe / WangRuiSi.exe / Minecraft_AQ84.exe"
+            "id": "mc",
+            "name": "🎮 Minecraft 整合包",
+            "desc": "下载即玩，无需配置",
+            "packages": [
+                {
+                    "id": "minecraft-portable",
+                    "name": "Minecraft 1.12.2 便携版",
+                    "description": "解压到 C:\\ 根目录，双击启动.bat 选用户名。含 JDK17 + 全资源 + 5个账号。",
+                    "version": "1.12.2",
+                    "date": "2026-08-01",
+                    "format": "zip",
+                    "url": "https://github.com/AQ84/download-site/releases/download/v1.0/Minecraft-Portable.zip",
+                    "size_mb": 894,
+                    "notes": "解压到 C:\\，双击 C:\\启动.bat 选择用户名即可"
+                },
+                {
+                    "id": "singlefile-mc",
+                    "name": "单文件启动器 (NEW!)",
+                    "description": "一个 EXE 一个玩家，改名双击即玩。内嵌纯净 1.12.2 + Java 8，首次自动解压。",
+                    "version": "1.12.2",
+                    "date": "2026-08-05",
+                    "format": "exe",
+                    "url": "https://github.com/AQ84/download-site/releases/download/v2.0/singlefileMC.exe",
+                    "size_mb": 415,
+                    "notes": "改名为: ChuLe.exe / LiuRuiJie.exe / WangRuiChen.exe / WangRuiSi.exe / Minecraft_AQ84.exe"
+                }
+            ]
         },
         {
-            "id": "minecraft-portable",
-            "name": "Minecraft 1.12.2 便携版",
-            "description": "解压到 C:\\ 根目录，双击启动.bat 选用户名即可玩。含 JDK17 + PCL + 5个账号 + 存档 + 材质包。自带改IP指南。",
-            "version": "1.12.2",
-            "date": "2026-08-01",
-            "format": "zip",
-            "url": "https://github.com/AQ84/download-site/releases/download/v1.0/Minecraft-Portable.zip",
-            "size_mb": 894,
-            "notes": "下载后解压到 C:\\，确保 C:\\LibericaJDK-17、C:\\.minecraft、C:\\PCL 三个目录都在，然后双击 C:\\启动.bat"
+            "id": "launcher",
+            "name": "🚀 启动器",
+            "desc": "MC 启动器工具",
+            "packages": [
+                {
+                    "id": "cloudlauncher",
+                    "name": "CloudLauncher",
+                    "description": "Qt5.15 静态编译 MC 启动器 v0.0.3，含 OpenSSL DLL",
+                    "version": "0.0.3",
+                    "date": "2026-07-29",
+                    "format": "zip",
+                    "parts": ["CloudLauncher-latest.zip"],
+                    "merge_cmd": ""
+                }
+            ]
         },
         {
-            "id": "cloudlauncher",
-            "name": "CloudLauncher 启动器",
-            "description": "Qt5.15 MC 启动器 v0.0.3，含 CloudLauncher.exe + OpenSSL DLL",
-            "version": "0.0.3",
-            "date": "2026-07-29",
-            "format": "zip",
-            "parts": ["CloudLauncher-latest.zip"],
-            "merge_cmd": ""
+            "id": "plugins",
+            "name": "☕ 服务器插件",
+            "desc": "MC 服务端插件 JAR",
+            "files": []
+        },
+        {
+            "id": "tools",
+            "name": "🔧 工具",
+            "desc": "辅助工具",
+            "files": []
         }
-    ],
-    "files": []
+    ]
 }
