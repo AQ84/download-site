@@ -56,7 +56,23 @@
             "id": "tools",
             "name": "🔧 工具",
             "desc": "辅助工具",
-            "files": []
+            "packages": [],
+            "files": [
+                {
+                    "name": "playit-windows-x86_64-signed.exe",
+                    "size_bytes": 4800000,
+                    "date": "2026-08-05",
+                    "version": "latest",
+                    "description": "playit.gg 内网穿透 64位 — 固定域名 MC 开服"
+                },
+                {
+                    "name": "playit-windows-x86-signed.exe",
+                    "size_bytes": 3700000,
+                    "date": "2026-08-05",
+                    "version": "latest",
+                    "description": "playit.gg 内网穿透 32位 — 老旧 Win7 用"
+                }
+            ]
         }
     ]
 }
