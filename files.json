@@ -1,6 +1,17 @@
 {
     "packages": [
         {
+            "id": "singlefile-mc",
+            "name": "MC 单文件启动器 (NEW!)",
+            "description": "一个 EXE 一个玩家！下载后改名为你的用户名.exe 双击即玩。首次运行自动解压，之后秒开。内含纯净 1.12.2 + Java 8 + PCL。",
+            "version": "1.12.2",
+            "date": "2026-08-05",
+            "format": "exe",
+            "url": "https://github.com/AQ84/download-site/releases/download/v2.0/singlefileMC.exe",
+            "size_mb": 421,
+            "notes": "改名规则: ChuLe.exe / LiuRuiJie.exe / WangRuiChen.exe / WangRuiSi.exe / Minecraft_AQ84.exe"
+        },
+        {
             "id": "minecraft-portable",
             "name": "Minecraft 1.12.2 便携版",
             "description": "解压到 C:\\ 根目录，双击启动.bat 选用户名即可玩。含 JDK17 + PCL + 5个账号 + 存档 + 材质包。自带改IP指南。",
