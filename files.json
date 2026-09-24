@@ -56,7 +56,19 @@
             "id": "tools",
             "name": "🔧 工具",
             "desc": "辅助工具",
-            "packages": [],
+            "packages": [
+                {
+                    "id": "yxqpanel",
+                    "name": "YxqPanel",
+                    "description": "希沃易启学工具箱 — 键盘解锁 / 窗口修复 / 按 F2 冻结教师端画面",
+                    "version": "1.0",
+                    "date": "2026-09-24",
+                    "format": "exe",
+                    "url": "https://wwbwm.lanzouq.com/iQG0L49sbbyd",
+                    "size_mb": 6,
+                    "notes": "蓝奏云网盘, 提取码 23nm"
+                }
+            ],
             "files": [
                 {
                     "name": "playit-windows-x86_64-signed.exe",
