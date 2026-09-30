@@ -25,8 +25,12 @@ download-site/
 
 ### 方式一（推荐）：在网站上直接改
 
-打开 **<https://download.aq84.xyz/admin.html>** → 输入管理员密钥 → 「读当前索引」→
+打开 **<https://download.aq84.xyz/admin>** → 输入管理员密钥 → 「读当前索引」→
 改 JSON → 「保存并发布」。保存后**立刻生效**，不用 push、不用等构建。
+
+> 地址写 `/admin` 就行。`/admin.html` 也能用 —— Cloudflare Pages 默认会把
+> `/xxx.html` 规范化重定向（308）到 `/xxx`，浏览器会自动跳过去。
+> 这两种写法都**别加书签给外人**（虽然没密钥改不了东西）。
 
 - 密钥只存在**你本机浏览器**里（localStorage），保存时通过请求头 `X-Admin-Key` 发给
   服务端校验；不走网址、不写日志、服务端也不保存。
