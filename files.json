@@ -1,6 +1,25 @@
 {
     "categories": [
         {
+            "id": "yxqpanel",
+            "name": "🛠️ YxqPanel",
+            "desc": "希沃易启学工具箱 · 单文件免安装",
+            "packages": [
+                {
+                    "id": "yxqpanel",
+                    "name": "YxqPanel",
+                    "description": "希沃易启学课堂管控工具箱 — 一键流程 / 键盘解锁 / 窗口修复 / F8·F9 控制广播窗口 / F2 冻帧。单文件免安装, 随时可还原",
+                    "version": "1.0.1.260930",
+                    "date": "2026-09-30",
+                    "format": "exe",
+                    "url": "https://wwbwm.lanzouq.com/ibTb94agnuba",
+                    "size_mb": 6,
+                    "notes": "蓝奏云网盘, 提取码 1111"
+                }
+            ],
+            "files": []
+        },
+        {
             "id": "mc",
             "name": "🎮 Minecraft 整合包",
             "desc": "下载即玩，无需配置",
@@ -41,7 +60,9 @@
                     "version": "0.0.3",
                     "date": "2026-07-29",
                     "format": "zip",
-                    "parts": ["CloudLauncher-latest.zip"],
+                    "parts": [
+                        "CloudLauncher-latest.zip"
+                    ],
                     "merge_cmd": ""
                 }
             ]
@@ -56,19 +77,7 @@
             "id": "tools",
             "name": "🔧 工具",
             "desc": "辅助工具",
-            "packages": [
-                {
-                    "id": "yxqpanel",
-                    "name": "YxqPanel",
-                    "description": "希沃易启学工具箱 — 键盘解锁 / 窗口修复 / 按 F2 冻结教师端画面",
-                    "version": "1.0",
-                    "date": "2026-09-24",
-                    "format": "exe",
-                    "url": "https://wwbwm.lanzouq.com/iQG0L49sbbyd",
-                    "size_mb": 6,
-                    "notes": "蓝奏云网盘, 提取码 23nm"
-                }
-            ],
+            "packages": [],
             "files": [
                 {
                     "name": "playit-windows-x86_64-signed.exe",
