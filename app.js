@@ -184,8 +184,15 @@
     });
 
     // === 加载 ===
-    fetch('files.json')
-        .then(r => r.json())
+    // 优先走 /api/files: 管理员在 admin.html 改的索引存在 KV 里, 由 Pages Function 提供。
+    // 拿不到(没绑 KV / 函数没部署 / 还没在线改过)就回落到仓库里的 files.json ——
+    // 这样这一层挂掉时站点照常工作, 只是不能在线改。
+    fetch('/api/files', { cache: 'no-store' })
+        .then(r => {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+        })
+        .catch(() => fetch('files.json', { cache: 'no-store' }).then(r => r.json()))
         .then(d => {
             data = d;
             renderCategories(d.categories || []);

@@ -10,3 +10,12 @@
 /files/*
   Cache-Control: public, max-age=3600
   Content-Disposition: attachment
+
+# 索引接口: 绝对不能缓存 —— 管理员改完要立刻看到, 而且带密钥的写请求更不该进缓存
+/api/*
+  Cache-Control: no-store
+  X-Content-Type-Options: nosniff
+
+# 管理页: 别让搜索引擎收录
+/admin.html
+  X-Robots-Tag: noindex, nofollow

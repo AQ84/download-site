@@ -1,0 +1,22 @@
+# Cloudflare Pages 配置
+#
+# 静态站点本身是"构建设置留空、输出目录就是仓库根"的老配置,
+# 这个文件主要是为了声明 Pages Functions 要用的 KV 绑定。
+name = "download-site"
+# 别写太新: 本机 wrangler 自带的 workerd 只支持到 2026-07-28,
+# 写更新的话 `wrangler pages dev` 起不来, 本地就没法先验证了。
+compatibility_date = "2026-07-28"
+pages_build_output_dir = "."
+
+# 文件索引存在 KV 里。KV 是键值对存储, **不是数据库** ——
+# 没有 SQL 语句、没有表、没有字符串拼接, 所以整类 SQL 注入在这里不存在。
+[[kv_namespaces]]
+binding = "FILES_KV"
+id = "5c14bd9998f1452aa0adbd99137292e9"
+
+# 管理员密钥【故意不写在这里】—— 这个仓库是公开的, 写进来等于把密码公开。
+# 用加密环境变量:
+#   npx wrangler pages secret put ADMIN_KEY --project-name download-site
+# 或后台: Workers & Pages → download-site → 设置 → 变量和机密 → 添加(类型选「机密」)
+#
+# 没配的话写接口会返回 503 并提示去哪儿配, 公开读接口不受影响。

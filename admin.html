@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AQ84 下载站 · 管理</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 管理页自己的样式, 不动 style.css(那是首页在用的) */
+        .adm-box { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 16px; margin: 16px 0; }
+        .adm-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+        .adm-row:last-child { margin-bottom: 0; }
+        .adm-lbl { font-size: 13px; color: #8b949e; min-width: 72px; }
+        input[type=password], input[type=text] {
+            flex: 1; min-width: 200px; padding: 8px 10px; font-size: 14px;
+            background: #0d1117; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px;
+        }
+        input:focus { outline: none; border-color: #388bfd; }
+        button {
+            padding: 8px 14px; font-size: 13px; cursor: pointer;
+            background: #21262d; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px;
+        }
+        button:hover { background: #30363d; }
+        button.primary { background: #238636; border-color: #2ea043; color: #fff; }
+        button.primary:hover { background: #2ea043; }
+        button.danger { color: #f85149; }
+        button:disabled { opacity: .5; cursor: not-allowed; }
+        textarea {
+            width: 100%; box-sizing: border-box; height: 46vh; min-height: 320px;
+            padding: 12px; font-family: Consolas, "Courier New", monospace; font-size: 13px;
+            line-height: 1.55; tab-size: 4;
+            background: #0d1117; color: #c9d1d9; border: 1px solid #30363d; border-radius: 6px;
+            resize: vertical;
+        }
+        textarea:focus { outline: none; border-color: #388bfd; }
+        .adm-status { font-size: 13px; padding: 10px 12px; border-radius: 6px; margin-top: 10px; line-height: 1.6; }
+        .adm-status.ok   { background: #0f2f1a; color: #3fb950; border: 1px solid #238636; }
+        .adm-status.err  { background: #2d1214; color: #f85149; border: 1px solid #6e2024; }
+        .adm-status.info { background: #121d2f; color: #79c0ff; border: 1px solid #1f3d68; }
+        .adm-meta { font-size: 12px; color: #8b949e; margin-top: 8px; line-height: 1.7; }
+        .adm-meta b { color: #c9d1d9; font-weight: 600; }
+        .adm-tip { font-size: 12px; color: #8b949e; line-height: 1.8; }
+        .adm-tip code { background: #161b22; padding: 1px 5px; border-radius: 3px; color: #79c0ff; }
+        h2.adm { font-size: 15px; color: #c9d1d9; margin: 22px 0 8px 0; }
+        .adm-back { font-size: 13px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 下载站管理</h1>
+            <p class="subtitle">改文件索引 · <a href="/" class="adm-back">← 回首页</a></p>
+        </header>
+
+        <!-- ============ 密钥 ============ -->
+        <div class="adm-box">
+            <div class="adm-row">
+                <span class="adm-lbl">管理员密钥</span>
+                <input type="password" id="key" placeholder="输入密钥后才能保存" autocomplete="current-password">
+                <button id="btnForget">忘记密钥</button>
+            </div>
+            <div class="adm-tip">
+                密钥只存在<b>本机浏览器</b>里(localStorage)，保存时通过请求头 <code>X-Admin-Key</code> 发给服务端校验，
+                不走网址、不写日志、服务端也不保存。换台机器要重新输入。
+            </div>
+        </div>
+
+        <!-- ============ 当前状态 ============ -->
+        <div class="adm-row">
+            <button id="btnLoad">🔄 读当前索引</button>
+            <span class="adm-meta" id="srcInfo">—</span>
+        </div>
+
+        <!-- ============ 编辑区 ============ -->
+        <h2 class="adm">文件索引 (files.json 的内容)</h2>
+        <textarea id="editor" spellcheck="false" placeholder="点上面的「读当前索引」开始"></textarea>
+
+        <div class="adm-row" style="margin-top:10px">
+            <button id="btnCheck">✅ 只校验</button>
+            <button id="btnFormat">🎨 格式化</button>
+            <button id="btnTplPkg">➕ 插入外链包模板</button>
+            <button id="btnTplFile">➕ 插入站内文件模板</button>
+            <button class="primary" id="btnSave">💾 保存并发布</button>
+        </div>
+        <div class="adm-row">
+            <button id="btnCopy">📋 复制 JSON</button>
+            <button id="btnDownload">⬇ 下载 JSON</button>
+            <button class="danger" id="btnReset">↩ 丢弃修改，重新读取</button>
+        </div>
+
+        <div class="adm-status info" id="status">正在初始化…</div>
+        <div class="adm-meta" id="meta"></div>
+
+        <h2 class="adm">两种条目别混</h2>
+        <div class="adm-tip">
+            · <b>packages[] 里带 url</b> → 渲染成外链按钮，<b>蓝奏云 / GitHub releases / 别的网盘都用这个</b>，
+              链接必须 http/https 开头，可以加 <code>notes</code>（会显示成 📌，放提取码正合适）。<br>
+            · <b>packages[] 里带 parts[]</b> → 分片包，每片是站内 <code>files/</code> 目录下的文件名。<br>
+            · <b>files[]</b> → 站内单文件，<b>只能指 files/ 目录下真实存在的文件</b>，
+              名字里不能有 <code>/</code> 或 <code>\</code>。<br>
+            · 外链塞进 files[] 会被当成站内文件名，点了 404。
+        </div>
+    </div>
+
+<script>
+(function () {
+    'use strict';
+
+    const LS_KEY   = 'aq84_dl_admin_key';
+    const $key     = document.getElementById('key');
+    const $editor  = document.getElementById('editor');
+    const $status  = document.getElementById('status');
+    const $meta    = document.getElementById('meta');
+    const $srcInfo = document.getElementById('srcInfo');
+
+    let lastLoaded = '';   // 用来算"有没有改过"
+
+    // ---------- 小工具 ----------
+    function say(kind, html) {
+        $status.className = 'adm-status ' + kind;
+        $status.innerHTML = html;
+    }
+
+    function esc(s) {
+        return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function getKey() { return $key.value.trim(); }
+
+    function saveKey() {
+        try {
+            if (getKey()) localStorage.setItem(LS_KEY, $key.value);
+            else localStorage.removeItem(LS_KEY);
+        } catch (e) { /* 隐私模式下写不了, 不影响使用 */ }
+    }
+
+    // ---------- 本地校验(服务端还会再校验一遍, 这里只是为了少跑一趟) ----------
+    function localCheck(text) {
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            return { ok: false, error: 'JSON 语法错误: ' + e.message };
+        }
+        if (!data || typeof data !== 'object' || Array.isArray(data)) {
+            return { ok: false, error: '顶层必须是一个对象' };
+        }
+        if (!Array.isArray(data.categories)) {
+            return { ok: false, error: '缺少 categories 数组' };
+        }
+
+        let np = 0, nf = 0;
+        for (let i = 0; i < data.categories.length; i++) {
+            const c = data.categories[i];
+            const w = '第 ' + (i + 1) + ' 个分类';
+            if (!c || typeof c !== 'object') return { ok: false, error: w + ' 不是对象' };
+            if (!c.id || !/^[A-Za-z0-9_-]+$/.test(c.id)) {
+                return { ok: false, error: w + ' 的 id 只能用字母/数字/下划线/连字符' };
+            }
+            if (!c.name) return { ok: false, error: w + ' 缺少 name' };
+
+            const pkgs = c.packages || [];
+            const fls  = c.files || [];
+            if (!Array.isArray(pkgs)) return { ok: false, error: w + ' 的 packages 不是数组' };
+            if (!Array.isArray(fls))  return { ok: false, error: w + ' 的 files 不是数组' };
+
+            for (let j = 0; j < pkgs.length; j++) {
+                const p = pkgs[j];
+                const pw = w + ' 第 ' + (j + 1) + ' 个包';
+                if (!p.name) return { ok: false, error: pw + ' 缺少 name' };
+                if (p.url) {
+                    if (!/^https?:\/\//i.test(p.url)) {
+                        return { ok: false, error: pw + ' 的 url 必须 http/https 开头（javascript: 之类的会被服务端拒掉）' };
+                    }
+                } else if (Array.isArray(p.parts)) {
+                    for (const part of p.parts) {
+                        if (/[\\/]/.test(part)) return { ok: false, error: pw + ' 的分片名不能含 / 或 \\' };
+                    }
+                } else {
+                    return { ok: false, error: pw + ' 既没有 url 也没有 parts' };
+                }
+            }
+            for (let k = 0; k < fls.length; k++) {
+                const f = fls[k];
+                const fw = w + ' 第 ' + (k + 1) + ' 个文件';
+                if (!f.name) return { ok: false, error: fw + ' 缺少 name' };
+                if (f.name === '.' || f.name === '..' || /[\\/]/.test(f.name)) {
+                    return { ok: false, error: fw + ' 的 name 不合法（不能含 / 或 \\）' };
+                }
+            }
+            np += pkgs.length;
+            nf += fls.length;
+        }
+        return { ok: true, data, np, nf };
+    }
+
+    function showMeta(data, np, nf, bytes) {
+        $meta.innerHTML =
+            '分类 <b>' + data.categories.length + '</b> · ' +
+            '包 <b>' + np + '</b> · ' +
+            '站内文件 <b>' + nf + '</b> · ' +
+            'JSON <b>' + (bytes || $editor.value.length) + '</b> 字节';
+    }
+
+    // ---------- 读取 ----------
+    function load() {
+        say('info', '正在读取…');
+        fetch('/api/files', { cache: 'no-store' })
+            .then(function (r) {
+                const src = r.headers.get('X-Index-Source') || '?';
+                const kvb = r.headers.get('X-KV-Bound');
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                return r.json().then(function (d) {
+                    return { d: d, src: src, kvb: kvb };
+                });
+            })
+            .then(function (res) {
+                $editor.value = JSON.stringify(res.d, null, 4);
+                lastLoaded = $editor.value;
+
+                $srcInfo.innerHTML = '存储来源: <b>' + esc(res.src) + '</b>' +
+                    (res.src === 'static'
+                        ? (res.kvb === '0'
+                            ? ' · <b style="color:#f85149">KV 未绑定，现在只能读不能写</b>'
+                            : ' · <b style="color:#d29922">还没在线改过（首次保存后会存进 KV）</b>')
+                        : ' · KV');
+
+                const c = localCheck($editor.value);
+                if (c.ok) {
+                    showMeta(c.data, c.np, c.nf);
+                    say('ok', '已读取 ✓ 现在可以改，改完点「保存并发布」。');
+                } else {
+                    say('err', '读到了数据但校验没过: ' + esc(c.error));
+                }
+            })
+            .catch(function (e) {
+                say('err', '读取失败: ' + esc(e.message));
+            });
+    }
+
+    // ---------- 保存 ----------
+    function save() {
+        const key = getKey();
+        if (!key) {
+            say('err', '先填管理员密钥。');
+            $key.focus();
+            return;
+        }
+
+        const c = localCheck($editor.value);
+        if (!c.ok) {
+            say('err', '本地校验没过，没往服务端发: ' + esc(c.error));
+            return;
+        }
+
+        say('info', '正在保存…');
+        fetch('/api/files', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8',
+                'X-Admin-Key': key,
+            },
+            body: $editor.value,
+        })
+            .then(function (r) {
+                return r.json().catch(function () { return {}; }).then(function (j) {
+                    return { ok: r.ok, status: r.status, j: j };
+                });
+            })
+            .then(function (res) {
+                if (res.ok && res.j.ok) {
+                    saveKey();
+                    lastLoaded = $editor.value;
+                    showMeta(c.data, c.np, c.nf, res.j.bytes);
+                    say('ok', '保存成功 ✓ 已发布在 <b>/api/files</b>（首页刷新即可看到）。' +
+                        '<br>分类 ' + res.j.categories + ' · 包 ' + res.j.packages + ' · 文件 ' + res.j.files +
+                        ' · ' + res.j.bytes + ' 字节');
+                    $srcInfo.innerHTML = '存储来源: <b>kv</b>';
+                } else {
+                    let msg = res.j.error || ('HTTP ' + res.status);
+                    if (Array.isArray(res.j.howto)) {
+                        msg += '<br><br>怎么修：<br>· ' + res.j.howto.map(esc).join('<br>· ');
+                    }
+                    say(res.status === 401 ? 'err' : 'err', '保存失败: ' + msg);
+                }
+            })
+            .catch(function (e) {
+                say('err', '保存失败: ' + esc(e.message));
+            });
+    }
+
+    // ---------- 模板 ----------
+    function insertPkgTemplate() {
+        // 插到第一个分类的 packages 数组里 —— 直接改文本, 保证缩进跟手写的一样
+        const tpl = {
+            id: 'new-pkg',
+            name: '新工具',
+            description: '一句话说明',
+            version: '1.0',
+            date: new Date().toISOString().slice(0, 10),
+            format: 'exe',
+            url: 'https://wwbwm.lanzouq.com/xxxxxxxx',
+            size_mb: 10,
+            notes: '蓝奏云, 提取码 xxxx'
+        };
+        insertInto('packages', tpl, '外链包');
+    }
+
+    function insertFileTemplate() {
+        const tpl = {
+            name: '新文件.zip',
+            size_bytes: 1234567,
+            date: new Date().toISOString().slice(0, 10),
+            version: 'latest',
+            description: '一句话说明'
+        };
+        insertInto('files', tpl, '站内文件');
+    }
+
+    function insertInto(field, tpl, what) {
+        let data;
+        try {
+            data = JSON.parse($editor.value);
+        } catch (e) {
+            say('err', '先让 JSON 合法再插模板: ' + esc(e.message));
+            return;
+        }
+        if (!Array.isArray(data.categories) || !data.categories.length) {
+            say('err', '先有一个分类才能插模板。');
+            return;
+        }
+        // 插到最后一个分类 —— 通常你就是在往最近加的那个分类里加东西
+        const cat = data.categories[data.categories.length - 1];
+        if (!Array.isArray(cat[field])) cat[field] = [];
+        cat[field].push(tpl);
+        $editor.value = JSON.stringify(data, null, 4);
+        const c = localCheck($editor.value);
+        if (c.ok) {
+            showMeta(c.data, c.np, c.nf);
+            say('info', '已插入一条「' + what + '」模板到分类「' + esc(cat.name || cat.id) +
+                '」，<b>把里面的字段改成真实内容再保存</b>。');
+        }
+    }
+
+    // ---------- 绑定 ----------
+    $key.addEventListener('input', saveKey);
+
+    document.getElementById('btnForget').addEventListener('click', function () {
+        $key.value = '';
+        saveKey();
+        say('info', '已清掉本机保存的密钥。');
+    });
+
+    document.getElementById('btnLoad').addEventListener('click', load);
+
+    document.getElementById('btnCheck').addEventListener('click', function () {
+        const c = localCheck($editor.value);
+        if (c.ok) {
+            showMeta(c.data, c.np, c.nf);
+            say('ok', '校验通过 ✓ ' + '分类 ' + c.data.categories.length + ' · 包 ' + c.np + ' · 文件 ' + c.nf);
+        } else {
+            say('err', '校验没过: ' + esc(c.error));
+        }
+    });
+
+    document.getElementById('btnFormat').addEventListener('click', function () {
+        try {
+            $editor.value = JSON.stringify(JSON.parse($editor.value), null, 4);
+            say('info', '已格式化。');
+        } catch (e) {
+            say('err', 'JSON 语法错误, 没法格式化: ' + esc(e.message));
+        }
+    });
+
+    document.getElementById('btnTplPkg').addEventListener('click', insertPkgTemplate);
+    document.getElementById('btnTplFile').addEventListener('click', insertFileTemplate);
+    document.getElementById('btnSave').addEventListener('click', save);
+
+    document.getElementById('btnCopy').addEventListener('click', function () {
+        navigator.clipboard.writeText($editor.value).then(function () {
+            say('ok', '已复制到剪贴板。');
+        }, function () {
+            say('err', '复制失败, 手动全选吧。');
+        });
+    });
+
+    document.getElementById('btnDownload').addEventListener('click', function () {
+        const blob = new Blob([$editor.value], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'files.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+    });
+
+    document.getElementById('btnReset').addEventListener('click', function () {
+        if ($editor.value !== lastLoaded && !confirm('当前编辑的内容会丢掉，确定重新读取？')) return;
+        load();
+    });
+
+    // 有改动时离开提醒
+    window.addEventListener('beforeunload', function (e) {
+        if ($editor.value && $editor.value !== lastLoaded) {
+            e.preventDefault();
+            e.returnValue = '';
+        }
+    });
+
+    // ---------- 启动 ----------
+    try {
+        const saved = localStorage.getItem(LS_KEY);
+        if (saved) $key.value = saved;
+    } catch (e) { /* 忽略 */ }
+
+    load();
+})();
+</script>
+</body>
+</html>

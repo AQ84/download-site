@@ -1,3 +1,7 @@
 .DS_Store
 Thumbs.db
 *.tmp
+
+# wrangler / 本地开发状态(本地测试的 KV 数据、账号缓存, 不该进仓库)
+.wrangler/
+node_modules/
